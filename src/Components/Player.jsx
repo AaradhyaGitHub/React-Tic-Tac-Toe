@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-export default function Player({ name, symbol }) {
+export default function Player({ initalName, symbol }) {
+  const [playerName, setPlayerName] = useState(initalName);
   const [isEditing, setIsEditing] = useState(false);
 
   function handleEditClick() {
@@ -43,12 +44,34 @@ export default function Player({ name, symbol }) {
   */
   }
 
-  let playerName = <span className="player-name">{name}</span>;
+  function handleChange(event) {
+    setPlayerName(event.target.value);
+    //userInput.value holds the user input and we are using it to set the new state for PlayerName.
+    //We then feed that new input to the input tab below.
+  }
+  /*
+    onChange will trigger for every key stroke and provide us with an event object with the value that the user provided ie the key user hit 
+    so we use event as a parameter. 
+
+    We are passing a pointer at the the handleChange function to the onChange prop on the input element 
+    and the react will call handleChange when that change even occurs and will give is the userInput object as an argument. 
+  */
+
+  let editablePlayerName = <span className="player-name">{playerName}</span>;
 
   return (
     <li>
       <span className="player">
-        {isEditing ? <input type="text" required value={name} /> : playerName}
+        {isEditing ? (
+          <input
+            type="text"
+            required
+            value={playerName}
+            onChange={handleChange}
+          />
+        ) : (
+          editablePlayerName
+        )}
         <span className="player-symbol">{symbol}</span>
       </span>
 
