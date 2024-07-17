@@ -1,20 +1,4 @@
-const initialGameBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-  //idea is a allay full of array
-  //every array holds 3 value --> some will be null, some will be X or O depending on user input
-];
-
-export default function Gameboard({ onSelectSquare, turns }) {
-  let gameBoard = initialGameBoard;
-
-  for (const turn of turns) {
-    const { square, player } = turn;
-    const { row, col } = square;
-
-    gameBoard[row][col] = player;
-  }
+export default function Gameboard({ onSelectSquare, board }) {
   {
     /* 
       
@@ -50,12 +34,6 @@ export default function Gameboard({ onSelectSquare, turns }) {
             onSelectSquare();
           }
 
-
-*/
-  }
-
-  {
-    /*
     We got a problem.....We need to know currently active player in Gameboard and Player Components.
     In Gameboard, we need to know what symbol is being used 
     In Player, we need to know which player is currently active by using CSS
@@ -68,7 +46,7 @@ export default function Gameboard({ onSelectSquare, turns }) {
   }
   return (
     <ol id="game-board">
-      {gameBoard.map((row, rowIndex) => (
+      {board.map((row, rowIndex) => (
         <li key={rowIndex}>
           <ol>
             {row.map((playerSymbol, colIndex) => (
@@ -77,9 +55,9 @@ export default function Gameboard({ onSelectSquare, turns }) {
                   onClick={() => onSelectSquare(rowIndex, colIndex)}
                   //we need a way to dynamically disable the button
                   disabled={playerSymbol !== null}
-                  //playerSymbol is an X or 0 means that the button has been clicked 
-                  //if it is null, the button has not been closed and it is enabled. 
-                  //if it is not null, it is either an X or an O....it has already been interacted with 
+                  //playerSymbol is an X or 0 means that the button has been clicked
+                  //if it is null, the button has not been closed and it is enabled.
+                  //if it is not null, it is either an X or an O....it has already been interacted with
                 >
                   {playerSymbol}
                 </button>

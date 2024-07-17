@@ -34,7 +34,7 @@ function App() {
   const activePlayer = derivedActivePlayer(gameTurns);
   let gameBoard = initialGameBoard;
 
-  for (const turn of turns) {
+  for (const turn of gameTurns) {
     const { square, player } = turn;
     const { row, col } = square;
 
