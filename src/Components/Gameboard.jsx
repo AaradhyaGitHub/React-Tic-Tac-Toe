@@ -73,7 +73,16 @@ export default function Gameboard({ onSelectSquare, turns }) {
           <ol>
             {row.map((playerSymbol, colIndex) => (
               <li key={colIndex}>
-                <button onClick={()=>onSelectSquare(rowIndex, colIndex)}> {playerSymbol} </button>
+                <button
+                  onClick={() => onSelectSquare(rowIndex, colIndex)}
+                  //we need a way to dynamically disable the button
+                  disabled={playerSymbol !== null}
+                  //playerSymbol is an X or 0 means that the button has been clicked 
+                  //if it is null, the button has not been closed and it is enabled. 
+                  //if it is not null, it is either an X or an O....it has already been interacted with 
+                >
+                  {playerSymbol}
+                </button>
               </li>
             ))}
           </ol>
