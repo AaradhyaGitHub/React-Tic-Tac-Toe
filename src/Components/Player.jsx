@@ -60,7 +60,7 @@ export default function Player({ initalName, symbol, isActive }) {
   let editablePlayerName = <span className="player-name">{playerName}</span>;
 
   return (
-    <li className = {isActive ? 'active' : undefined}>
+    <li className={isActive ? "active" : undefined}>
       <span className="player">
         {isEditing ? (
           <input
