@@ -7,8 +7,12 @@ import GameOver from "./Components/GameOver.jsx";
 //Hardcoded possible winning combinations:
 import { WINNING_COMBINATIONS } from "./winning-combinations.js";
 
+const PLAYERS = {
+  X: "Player 1",
+  O: "Player 2",
+};
 
-const initialGameBoard = [
+const INITIAL_GAME_BOARD = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
@@ -25,21 +29,8 @@ function derivedActivePlayer(gameTurns) {
   return currentPlayer;
 }
 
-function App() {
-  const [players, setPlayers]= useState({
-    X: 'Player 1',
-    O: 'Player 2'
-  })
-  const [gameTurns, setGameTurns] = useState([]); // we already have this to triggrer UI
-
-  //lets use gameturns to check for winner
-  //CHECK FOR EVERY COMBINATION EACH TIME THE APP RE-RENDERS OR EACH TIME A BUTTON IS CLICKED
-
-  // const [activePlayer, setActivePlayer] = useState("X");
-  // So we don't really need this state
-  const activePlayer = derivedActivePlayer(gameTurns);
-
-  let gameBoard = [...initialGameBoard.map(array=>[...array])];
+function deriveGameBoard(gameTurns) {
+  let gameBoard = [...INITIAL_GAME_BOARD.map((array) => [...array])];
   //we copy the outer and inner array and reset it.
   //this is important because array is reference based and unless we clear it
   //we will still be stuck with the old values held in that array
@@ -51,6 +42,10 @@ function App() {
     gameBoard[row][col] = player;
   }
 
+  return gameBoard;
+}
+
+function deriveWinner(gameBoard, players) {
   let winner;
 
   for (const combination of WINNING_COMBINATIONS) {
@@ -69,7 +64,23 @@ function App() {
       winner = players[firstSquareSymbol];
     }
   }
+  return winner;
+}
 
+function App() {
+  const [players, setPlayers] = useState(PLAYERS);
+  const [gameTurns, setGameTurns] = useState([]);
+  // we already have this to triggrer UI
+  //lets use gameturns to check for winner
+  //CHECK FOR EVERY COMBINATION EACH TIME THE APP RE-RENDERS OR EACH TIME A BUTTON IS CLICKED
+
+  // const [activePlayer, setActivePlayer] = useState("X");
+  // So we don't really need this state
+
+  const activePlayer = derivedActivePlayer(gameTurns);
+  const gameBoard = deriveGameBoard(gameTurns);
+
+  const winner = deriveWinner(gameBoard, players);
   const hasDraw = gameTurns.length === 9 && !winner;
 
   function handleSelectSquare(rowIndex, colIndex) {
@@ -85,38 +96,39 @@ function App() {
     });
   }
 
-  function handleRestart(){
+  function handleRestart() {
     setGameTurns([]);
   }
 
-  function handlePlayerNameChange(symbol, newName){
-    setPlayers(prevPlayers =>{
-      return{
+  function handlePlayerNameChange(symbol, newName) {
+    setPlayers((prevPlayers) => {
+      return {
         ...prevPlayers,
-        [symbol]: newName
-      }
+        [symbol]: newName,
+      };
     });
   }
-
 
   return (
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
           <Player
-            initalName="Player 1"
+            initalName={PLAYERS.X}
             symbol="X"
             isActive={activePlayer === "X"}
-            onChangeName = {handlePlayerNameChange}
+            onChangeName={handlePlayerNameChange}
           />
           <Player
-            initalName="Player 2"
+            initalName={PLAYERS.O}
             symbol="O"
             isActive={activePlayer === "O"}
-            onChangeName = {handlePlayerNameChange}
+            onChangeName={handlePlayerNameChange}
           />
         </ol>
-        {(winner || hasDraw) && <GameOver winner = {winner} onRestart={handleRestart}/>}
+        {(winner || hasDraw) && (
+          <GameOver winner={winner} onRestart={handleRestart} />
+        )}
         <Gameboard onSelectSquare={handleSelectSquare} board={gameBoard} />
       </div>
       <Log turns={gameTurns} />
