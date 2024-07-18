@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Player({ initalName, symbol, isActive }) {
+export default function Player({ initalName, symbol, isActive, onChangeName }) {
   const [playerName, setPlayerName] = useState(initalName);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -10,6 +10,9 @@ export default function Player({ initalName, symbol, isActive }) {
     // pass a function instead which React will automatically call and guarentee current state
 
     setIsEditing((editing) => !editing);
+    if (isEditing) {
+      onChangeName(symbol, playerName);
+    }
 
     //setIsEditing(!isEditing) also worked but React behind the scenes "schedules" the state update
 
